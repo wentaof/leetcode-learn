@@ -12,10 +12,10 @@
 """
 class Solution:
     def isValid(self, s):
-
         m = {")":"(", "}":"{", "]":"["}
         stack = []
         for c in s:
+            # if not c in m:   这种写法等同于下面.keys()
             if not c in m.keys():
                 stack.append(c)
             elif not stack or m.get(c) != stack.pop():

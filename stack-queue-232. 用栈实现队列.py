@@ -16,7 +16,6 @@ class MyQueue:
         self.push_stack = []
         self.pop_stack = []
 
-
     def push(self, x: int):
         self.push_stack.append(x)
 
