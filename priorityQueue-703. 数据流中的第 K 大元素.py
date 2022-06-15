@@ -19,6 +19,7 @@ int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 
     2.二分查找
 -------------------------------------------------
 """
+import heapq
 class KthLargest:
 
     def __init__(self, k: int, nums):
@@ -31,9 +32,21 @@ class KthLargest:
         self.l = self.l[:self.k]
         return self.l[-1]
 
+class KthLargest2:
+    """优先队列做法"""
+    def __init__(self, k: int, nums):
+        self.l = []
+        self.k = k
+        self.l += nums
+        heapq.heapify(self.l)
 
+    def add(self, val: int) -> int:
+        heapq.heappush(self.l,val)
+        while len(self.l) > self.k:
+            heapq.heappop(self.l)
+        return self.l[0]
 
-kthLargest = KthLargest(3, [4, 5, 8, 2]);
+kthLargest = KthLargest2(3, [4, 5, 8, 2]);
 print(kthLargest.add(3)) # return 4
 print(kthLargest.add(5)) #5
 print(kthLargest.add(10))#5
