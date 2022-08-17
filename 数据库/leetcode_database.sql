@@ -124,4 +124,56 @@ WHERE
                 AND e1.DepartmentId = e2.DepartmentId
         )
 ;
+--196. 删除重复的电子邮箱
+delete from Person where id in (
+    select id from (
+        select id,row_number() over(partition by email order by id) no from Person
+    )t1 where no > 1
+)
+--官网答案
+DELETE p1 FROM Person p1,
+    Person p2
+WHERE
+    p1.Email = p2.Email AND p1.Id > p2.Id
 
+--197. 上升的温度
+select w1.id
+from Weather w1,Weather w2
+where datediff(w1.recordDate,w2.recordDate)=1 and w1.Temperature > w2.Temperature
+
+SELECT
+    weather.id AS 'Id'
+FROM
+    weather
+        JOIN
+    weather w ON DATEDIFF(weather.date, w.date) = 1
+        AND weather.Temperature > w.Temperatur
+--262. 行程和用户
+select
+request_at as 'Day', round(sum( if(status != 'completed',1,0)) * 1.0 / count(1),2) as 'Cancellation Rate'
+from Trips a
+join Users b on a.client_id = b.users_id and b.banned = 'No'
+join Users c on a.driver_id = c.users_id and c.banned = 'No'
+where request_at BETWEEN '2013-10-01' AND '2013-10-03'
+group by request_at
+
+
+
+
+SELECT T.request_at AS `Day`,
+	ROUND(
+			SUM(
+				IF(T.STATUS = 'completed',0,1)
+			)
+			/
+			COUNT(T.STATUS),
+			2
+	) AS `Cancellation Rate`
+FROM Trips AS T
+JOIN Users AS U1 ON (T.client_id = U1.users_id AND U1.banned ='No')
+JOIN Users AS U2 ON (T.driver_id = U2.users_id AND U2.banned ='No')
+WHERE T.request_at BETWEEN '2013-10-01' AND '2013-10-03'
+GROUP BY T.request_at
+
+
+--511. 游戏玩法分析 I
